@@ -1,28 +1,21 @@
-// function Todo(id, task, completed){
-//     this.id = id,
-//     this.task = task,
-//     this.completed = completed
-// }
-let todos = [ ]
-
+let todos = [];
 
 const getTodo = (req, res) => {
     if(!todos){
         return res.status(400).json({error: 'no todos available'})
     }
-    let todoList = todos.map(({id, task, completed}) => {
-        return({id, task, completed})
-    })
-    return res.status(200).json(todoList)
+    return res.status(200).json(todos);
 }
 
 const addTodo = (req, res)=> {
-    let newTodo = req.body
+    let {task, completed} = req.body
+    let newTodo = {
+        id:todos.length +1,
+        task,
+        completed
+    }
     todos.push(newTodo)
-    let todoList = todos.map(({id, task, completed}) => {
-        return({id, task, completed})
-    })
-    return res.status(200).json(todoList)
+    return res.status(201).json(todos)
 }
 
 const deleteTodo =(req, res) => {
@@ -33,7 +26,20 @@ const deleteTodo =(req, res) => {
             return todo
         }
     })
-    return res.status(202).json(newTodos)
+    return res.status(200).json(newTodos)
 }
 
-module.exports =  { getTodo,addTodo, deleteTodo }
+const editTodo =(req, res) => {
+    let id = parseInt(req.params.id);
+    const { task } = req.body;
+
+    todos = todos.map((todo) => {
+        if(todo.id === Number(id)) {
+           todo.task = task;
+        }
+        return todo;
+    })
+    return res.status(200).json({message: 'Todo updated'})
+}
+
+module.exports =  { getTodo,addTodo, deleteTodo,editTodo }
