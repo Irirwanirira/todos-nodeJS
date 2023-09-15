@@ -3,7 +3,7 @@
 //     this.task = task,
 //     this.completed = completed
 // }
-let todos = [ {id:1, task:'coding', completed: true}, {id:2, task: 'drinking', completed: false}]
+let todos = [ ]
 
 
 const getTodo = (req, res) => {
@@ -25,4 +25,15 @@ const addTodo = (req, res)=> {
     return res.status(200).json(todoList)
 }
 
-module.exports =  { getTodo,addTodo }
+const deleteTodo =(req, res) => {
+    let id = parseInt(req.params.id);
+    console.log(id);
+    const newTodos = todos.filter((todo) => {
+        if(todo.id !== id) {
+            return todo
+        }
+    })
+    return res.status(202).json(newTodos)
+}
+
+module.exports =  { getTodo,addTodo, deleteTodo }
