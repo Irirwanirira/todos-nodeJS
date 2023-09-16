@@ -36,7 +36,6 @@ const addTodo = (req, res)=> {
         completed:false,
         date
     }
-    console.log(date);
     todos.push(newTodo)
     return res.status(201).json({message: "Task added successfully"})
 }
