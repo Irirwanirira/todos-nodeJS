@@ -21,16 +21,22 @@ const singleTodo = (req, res) => {
 
 }
 
+
 const addTodo = (req, res)=> {
-    let {task} = req.body
+    let {task} = req.body;
+    let date = new Date();
+    date = date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+    
     if(!task){
         return res.status(404).json({message: 'validate your task to submit'})
     }
     let newTodo = {
         id:todos.length +1,
         task,
-        completed:false
+        completed:false,
+        date
     }
+    console.log(date);
     todos.push(newTodo)
     return res.status(201).json({message: "Task added successfully"})
 }
