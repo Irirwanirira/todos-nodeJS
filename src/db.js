@@ -1,14 +1,19 @@
-let todos = [
+const todos = [
     {
         "id": 1,
-        "task": "die",
-        "completed": false
+        "task": "code",
+        "completed": false,
+        "isDeleted": false,
+        "date": "16-9-2023"
     },
     {
-        "id": 4,
-        "task": "rsuh",
-        "completed": false
+        "id": 2,
+        "task": "code",
+        "completed": false,
+        "isDeleted": false,
+        "date": "16-9-2023"
+
     }
 ];
 
-module.exports = todos
+module.exports = todos;
