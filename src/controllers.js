@@ -1,4 +1,4 @@
-const todos = require("./db");
+let todos = require("./db");
 
 const getTodo = (req, res) => {
     if(!todos.length){
@@ -18,9 +18,7 @@ const singleTodo = (req, res) => {
         let todo= todos.filter(todo => todo.id === id)
         res.status(200).json({message: `Todo ${id}`, todo})
     }
-
 }
-
 
 const addTodo = (req, res)=> {
     let {task} = req.body;
@@ -34,12 +32,13 @@ const addTodo = (req, res)=> {
         id:todos.length +1,
         task,
         completed:false,
-        date
+        date,
+        isDeleted: false
     }
     todos.push(newTodo)
     return res.status(201).json({message: "Task added successfully"})
 }
-
+// Hard delete
 const deleteTodo =(req, res) => {
     let id = Number(req.params.id);
 
@@ -52,17 +51,45 @@ const deleteTodo =(req, res) => {
      return res.status(200).json({message: `Todo ${id} was successfully deleted`})
     }
 }
+// Soft delete
+const softDelete = (req, res) => {
+    const id = Number(req.params.id);
+    let deleteTodo = [];
+
+  const index = todos.findIndex((todo) => {
+    return todo.id === id})
+
+  if(index !==-1){
+    todos[index].isDeleted = true;
+    deleteTodo = (todos.filter(todo => todo.isDeleted))
+    todos = todos.filter(todo => !todo.isDeleted);
+    res.status(200).json({message: `Todo ${id} has been softly deleted`})
+  }else {
+    res.status(400).json({message: `Unable to Remove ${id} from the list`})
+  }
+
+}
 
 const editTodo =(req, res) => {
     let id = parseInt(req.params.id);
     let { task } = req.body;
-    todos = todos.map((todo) => {
-        if(todo.id === Number(id)) {
-           todo.task = task;
+    const todoExists = todos.some((todo) => todo.id === id);
+
+        if(todoExists && task){
+            todos = todos.map((todo) => {
+                if(todo.id === Number(id)) {
+                    todo.task = task;
+                }
+                return todo;
+            });
+            return res.status(200).json({message: 'Todo is Successfully Edited'});
+        }else if(!todoExists && !task || task){
+            return res.status(404).json({ message: `Todo ${id} doesn't exist` });
+
+        }else{
+            return res.status(404).json({ message: `Todo ${id} exists, Please provide a valid task` });
+
         }
-        return todo;
-    })
-    return res.status(200).json({message: 'Todo  is Successfully Edited'})
 }
 
 const completeTodo =(req, res) => {
@@ -82,4 +109,4 @@ const completeTodo =(req, res) => {
     }
 } 
 
-module.exports =  { getTodo,addTodo, deleteTodo,editTodo, singleTodo, completeTodo, todos }
+module.exports =  { getTodo,addTodo, deleteTodo,editTodo, singleTodo, completeTodo, softDelete}
