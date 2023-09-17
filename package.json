@@ -7,10 +7,16 @@
     "build": "babel index.js -d dist",
     "start": "npm run build && nodemon dist/index.js",
     "lint": "npx eslint --fix src/*.js ",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=5000"
+    "test": "cross-env NODE_ENV=test jest --testTimeout=5000 --coverage"
   },
   "author": "",
   "license": "ISC",
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "dependencies": {
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
