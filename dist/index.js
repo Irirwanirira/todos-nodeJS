@@ -1,10 +1,16 @@
 const express = require('express');
-const {
-  default: router
-} = require('./src/todoRoutes');
+require('dotenv').config();
+const todoRoutes = require('./todoRoutes');
 const app = express();
-const PORT = 4000;
-app.use('/', router);
-app.listen(PORT, (req, res) => {
-  console.log('Server is up and running on ' + PORT);
+app.use(express.json());
+const PORT = process.env.PORT || 4000;
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: 'welcome to our endpoint'
+  });
 });
+app.use('/api', todoRoutes);
+app.listen(PORT, (req, res) => {
+  console.log(`Server is up and running on  ${PORT}`);
+});
+module.exports = app;
