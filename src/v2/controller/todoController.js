@@ -4,7 +4,7 @@ const {todo} = require('../models')
 
 router.get('/', (req, res) => {
     todo.findAll()
-    .then(() => {
+    .then((todo) => {
         if(todo.length){
           return  res.status(200).json({message: "Todo Successfully fetched", todo}) 
         }else{
@@ -13,6 +13,17 @@ router.get('/', (req, res) => {
         }
     })
     .catch((error) => res.status(404).send(error))
+})
+
+router.post('/posttodo', (req, res) => {
+    const body = req.body;
+    todo.create(body)
+    try {
+        return  res.status(201).json({message: "Todo Successfully created", todo}) 
+
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 
